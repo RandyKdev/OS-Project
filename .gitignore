@@ -1,3 +1,7 @@
 output
 test.c
 *.txt
+*.o
+*mod*
+*Module.*
+*.cmd*
