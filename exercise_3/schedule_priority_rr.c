@@ -1,5 +1,6 @@
 
 
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -30,7 +31,6 @@ void add(char *name, int priority, int burst){
     task->tid = id++;
     insert(&list, task);
     insert(&copyList, task);
-   // if(list!=NULL && list->next!=NULL)  printf("%s",list->next->task->name);
 }
 
 

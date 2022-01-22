@@ -17,7 +17,7 @@
  struct node *scheduled = NULL;
 
  int *WT;
- int *burst;
+
 // add a task to the list 
 static int id=0;
 void add(char *name, int priority, int burst){
@@ -33,21 +33,7 @@ void add(char *name, int priority, int burst){
     insert(&copyList, task);
 }
 
-void insert_node(struct node **head, Task *task){
-    struct node *new = malloc(sizeof(struct node));
-    struct node *temp = *head;
-    new->task = task;
-    if(*head ==NULL){
-        new->next=*head;
-        *head = new;
-        return;
-    }
-    while(temp->next!=NULL){
-        temp = temp->next;
-    }
-    new->next = temp->next;
-    temp->next = new;
-}
+//insert a scheduled task into the scheduled list;
 void s(char *name, int priority, int burst,int ids){
     Task *task;
     
@@ -57,8 +43,10 @@ void s(char *name, int priority, int burst,int ids){
     strcpy(task->name,name);
     task->priority = priority;
     task->tid = ids;
-    insert_node(&scheduled, task);
+    insert(&scheduled, task);
 }
+
+
 int length(){
   int count=0;
    struct node *temp=copyList;
@@ -81,21 +69,21 @@ void waitingTime(){
     WT = malloc(sizeof(int)*len);
     struct node *temp =scheduled;
     struct node *ptemp =scheduled->next ;
-    int burst =0;
+    int completion =0;
     initialize(len);
-    int total = 0;
+    int burstTotal = 0;
    printf("\n\n");
     while(temp!=NULL){
         while(ptemp!=NULL){
-            burst += ptemp->task->burst;
+            completion += ptemp->task->burst;
             if(ptemp->task->tid == temp->task->tid){
-                total +=ptemp->task->burst;
-                WT[temp->task->tid] = burst-total ;
+                burstTotal +=ptemp->task->burst;    //since burst times in the scheduled list have been slice we sum the slices to get the total
+                WT[temp->task->tid] = completion-burstTotal ;//WT = Completion - Burst;
             }
             ptemp = ptemp->next;
         }
-        burst = 0;
-        total=0;
+        completion = 0;
+        burstTotal=0;
         ptemp = scheduled;
         temp = temp->next;
     }

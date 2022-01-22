@@ -11,14 +11,20 @@
 
 
 // add a new task to the list of tasks
-void insert(struct node **head, Task *newTask) {
-    // add the new task to the list 
-    struct node *newNode = malloc(sizeof(struct node));
-
-    newNode->task = newTask;
-    newNode->next = *head;
-    *head = newNode;
-    
+void insert(struct node **head, Task *task){
+    struct node *new = malloc(sizeof(struct node));
+    struct node *temp = *head;
+    new->task = task;
+    if(*head ==NULL){
+        new->next=*head;
+        *head = new;
+        return;
+    }
+    while(temp->next!=NULL){
+        temp = temp->next;
+    }
+    new->next = temp->next;
+    temp->next = new;
 }
 
 // delete the selected task from the list

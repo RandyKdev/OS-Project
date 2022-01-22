@@ -13,10 +13,16 @@
 #define MIN_PRIORITY 1
 #define MAX_PRIORITY 10
 
+// list of processes
  struct node *list = NULL;
- int *arr;
-// add a task to the list 
+
+ //waiting time array
+ int *WT;
+
+//static counter to hold process id
 static int id=0;
+
+// add a task to the list 
 void add(char *name, int priority, int burst){
     Task *task;
     
@@ -27,9 +33,10 @@ void add(char *name, int priority, int burst){
     task->priority = priority;
     task->tid = id++;
     insert(&list, task);
-   // if(list!=NULL && list->next!=NULL)  printf("%s",list->next->task->name);
 }
 
+//get the length of the list to determine how large
+//the waiting time array will be
 int length(){
   int count=0;
    struct node *temp=list;
@@ -40,30 +47,32 @@ int length(){
     return count;
 }
 
+// calculate average waiting times
 void waitingTime(){
-    arr = malloc(sizeof(int)*length());
+    WT = malloc(sizeof(int)*length());
     int i =1;
-    arr[0]=0;
+    WT[0]=0;
     float sum=0.0;
     struct node *temp=list;
     while(temp  != NULL){
-        arr[i] = temp->task->burst + arr[i-1];
-        sum +=arr[i];
+        WT[i] = temp->task->burst + WT[i-1];
+        sum +=WT[i];
         temp = temp->next;
         i++;
     }
-
-
     printf("The average waiting time is %f", (float)(sum/length()));
 }
 
+
+// calculate average turn around time;
 void turnAroundTime(){
     struct node * temp = list;
     int sum=0;
     int i =0;
 
     while(temp!=NULL){
-        sum += arr[i] + temp->task->burst;
+
+        sum += WT[i] + temp->task->burst; // adding the burst time to waiting time
         i++;
         temp=temp->next; 
     }
@@ -71,14 +80,16 @@ void turnAroundTime(){
     printf("The average turn around time is %f", (float)(sum/length()));
 }
 
+//response time
 float responseTime(){
     int sum =0;
     int len = length();
     for(int i=0; i<len; i++){
-        sum+=arr[i];
+        sum+=WT[i];
     }
     return (float)(sum/len);
 }
+
 // invoke the scheduler
 void schedule(){
   struct node *temp = list;

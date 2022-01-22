@@ -166,7 +166,7 @@ void prepare_redirect(char *args[], int redirect_location, int dup, int flag)
     dup2(fileDescriptor, dup);
     close(fileDescriptor);
     free(args[redirect_location]);
-    free(args[redirect_location + 1]);
+    free(args[redirect_location + 1]);   
     args[redirect_location] = NULL;
     args[redirect_location + 1] = NULL;
 

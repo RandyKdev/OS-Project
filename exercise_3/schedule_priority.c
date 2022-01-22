@@ -32,25 +32,11 @@ void add(char *name, int priority, int burst){
    // if(list!=NULL && list->next!=NULL)  printf("%s",list->next->task->name);
 }
 
-void insert_node(struct node **head, Task *task){
-    struct node *new = malloc(sizeof(struct node));
-    struct node *temp = *head;
-    new->task = task;
-    if(*head ==NULL){
-        new->next=*head;
-        *head = new;
-        return;
-    }
-    while(temp->next!=NULL){
-        temp = temp->next;
-    }
-    new->next = temp->next;
-    temp->next = new;
-}
+
 
 int length(){
   int count=0;
-   struct node *temp=list;
+   struct node *temp=scheduled;
     while(temp  != NULL){
         count ++;
         temp = temp->next;
@@ -60,7 +46,7 @@ int length(){
 
 void WaitingTime(){
     int i =1;
-    int sum =0;
+    float sum =0.0;
     struct node *temp = scheduled;
     int len = length();
     WT = malloc(sizeof(int)*len);
@@ -77,7 +63,7 @@ void WaitingTime(){
 
 void turnAroundTime(){
     struct node * temp = scheduled;
-    int sum=0;
+    float sum=0.0;
     int i =0;
 
     while(temp!=NULL){
@@ -103,10 +89,11 @@ while(temp !=NULL){
         temp = temp->next;
     }
         run(greatest->task, greatest->task->burst);
-        insert_node(&scheduled, greatest->task);
+        insert(&scheduled, greatest->task);
         delete(&list, greatest->task);
         temp = list;
         greatest = list;
    }
+   WaitingTime();
 }
 

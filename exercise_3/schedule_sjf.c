@@ -27,28 +27,13 @@ void add(char *name, int priority, int burst){
     task->priority = priority;
     task->tid = id++;
     insert(&list, task);
-   // if(list!=NULL && list->next!=NULL)  printf("%s",list->next->task->name);
 }
 
-void insert_node(struct node **head, Task *task){
-    struct node *new = malloc(sizeof(struct node));
-    struct node *temp = *head;
-    new->task = task;
-    if(*head ==NULL){
-        new->next=*head;
-        *head = new;
-        return;
-    }
-    while(temp->next!=NULL){
-        temp = temp->next;
-    }
-    new->next = temp->next;
-    temp->next = new;
-}
 
+//get the length of the list
 int length(){
   int count=0;
-   struct node *temp=list;
+   struct node *temp=scheduled;
     while(temp  != NULL){
         count ++;
         temp = temp->next;
@@ -59,7 +44,7 @@ int length(){
 //calculate the waiting time
 void WaitingTime(){
     int i =1;
-    int sum =0;
+    float sum =0.0;
     struct node *temp = scheduled;
     int len = length();
     WT = malloc(sizeof(int)*len);
@@ -77,7 +62,7 @@ void WaitingTime(){
 //calculate the turn around time
 void turnAroundTime(){
     struct node * temp = scheduled;
-    int sum=0;
+    float sum=0.0;
     int i =0;
 
     while(temp!=NULL){
@@ -102,11 +87,13 @@ while(temp !=NULL){
         temp = temp->next;
     }
         run(shortest->task, shortest->task->burst);
-        insert_node(&scheduled, shortest->task);
+        insert(&scheduled, shortest->task);
         delete(&list, shortest->task);
         temp = list;
         shortest = list;
    }
+
+   WaitingTime();
 }
 
 
