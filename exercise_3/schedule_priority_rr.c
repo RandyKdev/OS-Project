@@ -35,21 +35,7 @@ void add(char *name, int priority, int burst){
 
 
 
-void insert_node(struct node **head, Task *task){
-    struct node *new = malloc(sizeof(struct node));
-    struct node *temp = *head;
-    new->task = task;
-    if(*head ==NULL){
-        new->next=*head;
-        *head = new;
-        return;
-    }
-    while(temp->next!=NULL){
-        temp = temp->next;
-    }
-    new->next = temp->next;
-    temp->next = new;
-}
+
 void s(char *name, int priority, int burst,int ids){
     Task *task;
     
@@ -59,8 +45,10 @@ void s(char *name, int priority, int burst,int ids){
     strcpy(task->name,name);
     task->priority = priority;
     task->tid = ids;
-    insert_node(&scheduled, task);
+    insert(&scheduled, task);
 }
+
+//length of the list of tasks
 int length(){
   int count=0;
    struct node *temp=copyList;
@@ -87,7 +75,6 @@ void waitingTime(){
     int burst =0;
     initialize(len);
     int total = 0;
-   printf("\n\n");
     while(temp!=NULL){
         while(ptemp!=NULL){
             //completion - burst for every task;
@@ -110,7 +97,7 @@ void waitingTime(){
     }
     printf("%d",WT[3]);
     
-    printf("\nThe average Waiting time is %f\n", (float)(avgSum/len));
+    printf("\nThe average Waiting time is %.3f\n", (float)(avgSum/len));
 }
 
 void avgTurnAroundTime(){
